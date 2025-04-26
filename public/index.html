@@ -8,6 +8,36 @@
 </head>
 <body>
 
+  <div id="filteri">
+    <select id="filter-genre">
+      <option value="">---Odaberi žanr---</option>
+      <option value="Action">Action</option>
+      <option value="Adventure">Adventure</option>
+      <option value="Comedy">Comedy</option>
+      <option value="Crime">Crime</option>
+      <option value="Drama">Drama</option>
+      <option value="Horror">Horror</option>
+      <option value="Romance">Romance</option>
+      <option value="Sci-Fi">Sci-Fi</option>
+      <option value="Thriller">Thriller</option>
+    </select>
+    <input type="number" id="filter-year-from" placeholder="Godina" min="1900" max="2023">
+    <select id="filter-country">
+      <option value="">---Odaberi drzavu---</option>
+      <option value="Australia">Australia</option>
+      <option value="Brazil">Brazil</option>
+      <option value="Canada">Canada</option>
+      <option value="China">China</option>
+      <option value="France">France</option>
+      <option value="Indonesia">Indonesia</option>
+      <option value="South Korea">South Korea</option>
+      <option value="UK">UK</option>
+      <option value="USA">USA</option>
+    </select>
+    <input type="range" id="filter-rating" min="0" max="10" step="0.1" value="7">
+    <span id="rating-value">7.0</span>
+    <button id="primijeni-filtere"">Filtriraj</button>
+  </div>
   <table id="filmovi-tablica">
     <thead>
     <tr>
@@ -26,6 +56,7 @@
     
 
   <script>
+    let sviFilmovi = [];
     fetch('filmovi.csv') 
       .then(res => res.text())
       .then(csv => {
@@ -33,8 +64,7 @@
           header: true,
           skipEmptyLines: true
         });
-
-        const filmovi = rezultat.data.map(film => ({
+        sviFilmovi = rezultat.data.map(film => ({
           title: film.title,
           year: Number(film.year),
           genres: film.genres,
@@ -43,13 +73,67 @@
           directors: film.directors,
           country: film.country
         }));
-        const prvih20 = filmovi.slice(0, 20);
-        prikaziTablicu(prvih20);
+        prikaziPocetneFilmove(sviFilmovi);
+        prikaziFiltriraneFilmove(sviFilmovi);
       })
       .catch(error => {
         console.error('Error fetching the CSV file:', error);
       });
-    function prikaziTablicu(filmovi) {
+      function prikaziPocetneFilmove(filmovi) {
+        const tbody = document.querySelector('#filmovi-tablica tbody');
+        tbody.innerHTML = ''; 
+        for(const film of filmovi) {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${film.title}</td>
+            <td>${film.year}</td>
+            <td>${film.genres}</td>
+            <td>${film.duration}</td>
+            <td>${film.rating}</td>
+            <td>${film.directors}</td>
+            <td>${film.country}</td>
+          `;
+          tbody.appendChild(row);
+        }
+      }
+      const rangeInput = document.getElementById('filter-rating');
+      const ratingDisplay = document.getElementById('rating-value');
+        rangeInput.addEventListener('input', () => {
+        ratingDisplay.textContent = rangeInput.value;
+      });
+      function filtriraj() {
+        const zanr = document.getElementById('filter-genre').value;
+        const godinaOd = parseInt(document.getElementById('filter-year-from').value);
+        const drzava = document.getElementById('filter-country').value;
+        const ocjena = parseFloat(document.getElementById('filter-rating').value);
+        const filtriraniFilmovi = sviFilmovi.filter(film => {
+          const zadovoljavaZanr = zanr ? film.genres.includes(zanr) : true;
+          const zadovoljavaGodina = godinaOd ? film.year >= godinaOd : true;
+          const zadovoljavaDrzava = drzava ? film.country === drzava : true;
+          const zadovoljavaOcjenu = film.rating >= ocjena;
+          return zadovoljavaZanr && zadovoljavaGodina && zadovoljavaDrzava && zadovoljavaOcjenu;
+        });
+        prikaziFiltriraneFilmove(filtriraniFilmovi);
+      }
+      document.getElementById('primijeni-filtere').addEventListener('click', filtriraj);
+      function prikaziFiltriraneFilmove(filmovi) {
+        const tbody = document.querySelector('#filmovi-tablica tbody');
+        tbody.innerHTML = ''; 
+        for(const film of filmovi) {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${film.title}</td>
+            <td>${film.year}</td>
+            <td>${film.genres}</td>
+            <td>${film.duration}</td>
+            <td>${film.rating}</td>
+            <td>${film.directors}</td>
+            <td>${film.country}</td>
+          `;
+          tbody.appendChild(row);
+        }
+      }
+/*     function prikaziTablicu(filmovi) {
       const tbody = document.querySelector('#filmovi-tablica tbody');
       tbody.innerHTML = ''; 
       for(const film of filmovi) {
@@ -65,7 +149,7 @@
         `;
         tbody.appendChild(row);
       }
-    } 
+    }  */
   </script>
 </body>
 </html>
