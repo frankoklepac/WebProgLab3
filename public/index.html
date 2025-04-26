@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -53,103 +54,13 @@
     <tbody>
     </tbody>
     </table>
-    
-
-  <script>
-    let sviFilmovi = [];
-    fetch('filmovi.csv') 
-      .then(res => res.text())
-      .then(csv => {
-        const rezultat = Papa.parse(csv, {
-          header: true,
-          skipEmptyLines: true
-        });
-        sviFilmovi = rezultat.data.map(film => ({
-          title: film.title,
-          year: Number(film.year),
-          genres: film.genres,
-          duration: Number(film.duration),
-          rating: Number(film.rating),
-          directors: film.directors,
-          country: film.country
-        }));
-        prikaziPocetneFilmove(sviFilmovi);
-        prikaziFiltriraneFilmove(sviFilmovi);
-      })
-      .catch(error => {
-        console.error('Error fetching the CSV file:', error);
-      });
-      function prikaziPocetneFilmove(filmovi) {
-        const tbody = document.querySelector('#filmovi-tablica tbody');
-        tbody.innerHTML = ''; 
-        for(const film of filmovi) {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${film.title}</td>
-            <td>${film.year}</td>
-            <td>${film.genres}</td>
-            <td>${film.duration}</td>
-            <td>${film.rating}</td>
-            <td>${film.directors}</td>
-            <td>${film.country}</td>
-          `;
-          tbody.appendChild(row);
-        }
-      }
-      const rangeInput = document.getElementById('filter-rating');
-      const ratingDisplay = document.getElementById('rating-value');
-        rangeInput.addEventListener('input', () => {
-        ratingDisplay.textContent = rangeInput.value;
-      });
-      function filtriraj() {
-        const zanr = document.getElementById('filter-genre').value;
-        const godinaOd = parseInt(document.getElementById('filter-year-from').value);
-        const drzava = document.getElementById('filter-country').value;
-        const ocjena = parseFloat(document.getElementById('filter-rating').value);
-        const filtriraniFilmovi = sviFilmovi.filter(film => {
-          const zadovoljavaZanr = zanr ? film.genres.includes(zanr) : true;
-          const zadovoljavaGodina = godinaOd ? film.year >= godinaOd : true;
-          const zadovoljavaDrzava = drzava ? film.country === drzava : true;
-          const zadovoljavaOcjenu = film.rating >= ocjena;
-          return zadovoljavaZanr && zadovoljavaGodina && zadovoljavaDrzava && zadovoljavaOcjenu;
-        });
-        prikaziFiltriraneFilmove(filtriraniFilmovi);
-      }
-      document.getElementById('primijeni-filtere').addEventListener('click', filtriraj);
-      function prikaziFiltriraneFilmove(filmovi) {
-        const tbody = document.querySelector('#filmovi-tablica tbody');
-        tbody.innerHTML = ''; 
-        for(const film of filmovi) {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${film.title}</td>
-            <td>${film.year}</td>
-            <td>${film.genres}</td>
-            <td>${film.duration}</td>
-            <td>${film.rating}</td>
-            <td>${film.directors}</td>
-            <td>${film.country}</td>
-          `;
-          tbody.appendChild(row);
-        }
-      }
-/*     function prikaziTablicu(filmovi) {
-      const tbody = document.querySelector('#filmovi-tablica tbody');
-      tbody.innerHTML = ''; 
-      for(const film of filmovi) {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${film.title}</td>
-          <td>${film.year}</td>
-          <td>${film.genres}</td>
-          <td>${film.duration}</td>
-          <td>${film.rating}</td>
-          <td>${film.directors}</td>
-          <td>${film.country}</td>
-        `;
-        tbody.appendChild(row);
-      }
-    }  */
-  </script>
+    <aside id="kosarica">
+      <h2>Moja kosarica</h2>
+      <ul id="lista-kosarice">
+      <!-- Dinamicki popunjeno -->
+      </ul>
+      <button id="potvrdi-kosaricu">Potvrdi odabir</button>
+      </aside>
+    <script src="script.js"></script>
 </body>
 </html>

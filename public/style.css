@@ -1,0 +1,16 @@
+#kosarica {
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  width: 250px;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  padding: 10px;
+  }
+  #kosarica ul {
+  list-style-type: none;
+  padding: 0;
+  }
+  #kosarica button {
+  margin-top: 10px;
+  }
