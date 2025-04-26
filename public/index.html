@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+
+  <table id="filmovi-tablica">
+    <thead>
+    <tr>
+    <th>Naslov</th>
+    <th>Godina</th>
+    <th>Zanr</th>
+    <th>Trajanje (min)</th>
+    <th>Ocjena</th>
+    <th>Redatelji</th>
+    <th>Država</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>
+    
+
+  <script>
+    fetch('filmovi.csv') 
+      .then(res => res.text())
+      .then(csv => {
+        const rezultat = Papa.parse(csv, {
+          header: true,
+          skipEmptyLines: true
+        });
+
+        const filmovi = rezultat.data.map(film => ({
+          title: film.title,
+          year: Number(film.year),
+          genres: film.genres,
+          duration: Number(film.duration),
+          rating: Number(film.rating),
+          directors: film.directors,
+          country: film.country
+        }));
+        const prvih20 = filmovi.slice(0, 20);
+        prikaziTablicu(prvih20);
+      })
+      .catch(error => {
+        console.error('Error fetching the CSV file:', error);
+      });
+    function prikaziTablicu(filmovi) {
+      const tbody = document.querySelector('#filmovi-tablica tbody');
+      tbody.innerHTML = ''; 
+      for(const film of filmovi) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${film.title}</td>
+          <td>${film.year}</td>
+          <td>${film.genres}</td>
+          <td>${film.duration}</td>
+          <td>${film.rating}</td>
+          <td>${film.directors}</td>
+          <td>${film.country}</td>
+        `;
+        tbody.appendChild(row);
+      }
+    } 
+  </script>
+</body>
+</html>
