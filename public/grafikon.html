@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+	<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Franko Klepač">  <!--Definiranje autora stranice-->
+		<link rel="stylesheet" href="style/style.css"> 
+		<title>Početna stranica WebProg</title>
+	</head>
+	<body>
+		<header>
+			<h1>Dobrodosli na moju web stranicu</h1>
+			</header>
+			<div>
+				<nav>
+					<input type="checkbox" id="menu-toggle" class="menu-toggle">
+					<label for="menu-toggle" class="hamburger">&#9776;</label>
+					<ul class="menu">
+						<li><a href="/">Početna</a></li>
+						<li><a href="/slike">Galerija</a></li>
+						<li><a href="/grafikon">Grafikon</a></li>
+						<li><a href="/videoteka">Videoteka</a></li>
+					</ul>
+				</nav>
+			</div>
+
+			<h1>Kategorije filmova</h1>
+
+			<main>
+				<section class="chart-section">
+					<div class="pie-div">
+						<div class="pie-chart"></div>
+							<div class="pie"></div>
+							<figcaption class="legends">
+								<span>Komedija 30%</span>
+								<span>Drama 25%</span>
+								<span>Akcija 20%</span>
+								<span>Avantura 10%</span>
+								<span>Horor 15%</span>
+							</figcaption>
+					</div>
+				</section>
+			
+				<section class="chart-section">
+					<div class="bar-chart">
+						<div class="bar" data-label="Komedija" data-value="30"></div>
+						<div class="bar" data-label="Drama" data-value="25"></div>
+						<div class="bar" data-label="Akcija" data-value="20"></div>
+						<div class="bar" data-label="Avantura" data-value="10"></div>
+						<div class="bar" data-label="Horor" data-value="15"></div>
+						<figcaption class="legends">
+							<span>Komedija 30%</span>
+							<span>Drama 25%</span>
+							<span>Akcija 20%</span>
+							<span>Avantura 10%</span>
+							<span>Horor 15%</span>
+						</figcaption>
+					</div>
+				</section>
+			</main>
+	</body>
+	</html>

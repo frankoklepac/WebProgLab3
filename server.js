@@ -1,18 +1,32 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
-
 const app = express();
-const PORT = 3000; // You can change the port if needed
 
-// Serve static files from the "public" directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Handle requests to the root URL
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.use(express.static('public'));
+
+app.get('/slike', (req, res) => {
+    const dataPath = path.join(__dirname, 'images.json');
+    const images = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+    res.render('slike', { images });
 });
 
-// Start the server
+app.get('/grafikon', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'grafikon.html'));
+});
+
+app.get('/videoteka' , (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'videoteka.html'));
+});
+
+app.get('/cart', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cart.html'));
+});
+
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server pokrenut na portu ${PORT}`);
 });

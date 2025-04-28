@@ -9,7 +9,7 @@ fetch('filmovi.csv')
     sviFilmovi = rezultat.data.map(film => ({
       title: film.title,
       year: Number(film.year),
-      genres: film.genres.replace(/;/g, '-'),
+      genres: film.genres.replace(/;/g, ', '),
       duration: Number(film.duration),
       rating: Number(film.rating),
       directors: film.directors,
